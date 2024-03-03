@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ftp_app/Add.dart';
 import 'package:ftp_app/database/database_service.dart';
 import 'package:ftp_app/database/ftp_db.dart';
+import 'package:get/get.dart';
 
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -171,21 +172,18 @@ class _LoginState extends State<Login> {
                               await FtpDB().doesUsernameExist(user);
                               if (userExists) {
                                 // User exists, handle login logic here
-                                var login = await FtpDB().getUser(id, user, password);
+                                var login = await FtpDB().getUser(
+                                    id, user, password);
                                 print(login);
                                 // if(login != null){
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return Showinformation();
-                                    },
-                                  ));
-                                }
-
+                                Get.to(() => Showinformation(), arguments:{
+                                  'username':user,
+                                });
                               } else {
                                 // User doesn't exist, handle accordingly
                                 print('User does not exist');
                               }
-                            },
+                            }},
                           child: Text("Log In"),
 
                     ),

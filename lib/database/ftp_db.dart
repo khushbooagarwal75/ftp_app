@@ -15,7 +15,14 @@ class FtpDB {
   );""");
   }
 
-
+  // Future<int> deleteUser(String username) async {
+  //   final database = await DatabaseService().database;
+  //   return await database.delete(
+  //     table2,
+  //     where: 'username = ?',
+  //     whereArgs: [username],
+  //   );
+  // }
   Future<void> createTableuserinfo(Database database) async {
     await database.execute("""CREATE TABLE IF NOT EXISTS $table2(
       "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -35,19 +42,25 @@ class FtpDB {
       int mobile_no,
       String email) async {
     final database = await DatabaseService().database;
-    return await database.rawInsert(
-      '''INSERT INTO $table2 (username,name,age,mobile_no,email) VALUES (?,?,?,?,?)''',
-      [
-        username,
-        name,
-        age,
-        mobile_no,
-        email
-      ],
-    );
+    try {
+      return await database.rawInsert(
+        '''INSERT INTO $table2 (username,name,age,mobile_no,email) VALUES (?,?,?,?,?)''',
+        [
+          username,
+          name,
+          age,
+          mobile_no,
+          email
+        ],
+      );
+    } catch (e) {
+      print('Error inserting user info: $e');
+      return -1; // Return an error code or handle the error as needed
+    }
   }
 
-  Future<int> updateuserinfo(int id,
+
+  Future<int> updateuserinfo(
       String username,
       String name,
       int age,
@@ -63,8 +76,8 @@ class FtpDB {
         'mobile_no': mobile_no,
         'email': email
       },
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'username = ?',
+      whereArgs: [username],
     );
   }
 

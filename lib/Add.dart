@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ftp_app/database/database_service.dart';
 import 'package:ftp_app/database/ftp_db.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Showinformation extends StatefulWidget {
@@ -26,6 +27,7 @@ class _ShowinformationState extends State<Showinformation> {
     databaseService = DatabaseService();
     _initializeDatabase();
     fetchData();
+
   }
   Future<void> _initializeDatabase() async {
     database = await databaseService.database;
@@ -33,9 +35,10 @@ class _ShowinformationState extends State<Showinformation> {
   }
 
   Future<void> fetchData() async {
+
     final ftpDB = FtpDB();
     final List<Map<String, dynamic>>? details = await ftpDB.fetchDetail();
-    if (details != null) {
+    if (details != null  && details.isNotEmpty) {
       print(details);
 
       // .text = details[0]["partname"] as String;
@@ -53,6 +56,9 @@ class _ShowinformationState extends State<Showinformation> {
       // Handle the case where details are null (e.g., error occurred)
     }
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +91,10 @@ class _ShowinformationState extends State<Showinformation> {
                         fontSize: 18.0,
 
                       ),),
-                      SizedBox(width: 13.0),
+                    ],
+                  ),
+                  Row(
+                    children: [
                       Text(
                         'Username:',
                         style: TextStyle(
@@ -93,7 +102,7 @@ class _ShowinformationState extends State<Showinformation> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text("Username",style: TextStyle(
+                      Text(Get.arguments['username'],style: TextStyle(
                         fontSize: 18.0,
 
                       ),),
@@ -203,9 +212,16 @@ class _ShowinformationState extends State<Showinformation> {
                       //       _fromLocation, _toLocation, _transferDate);
                       // }
                       if(name.text.isNotEmpty && age.text.isNotEmpty && mobile_no.text.isNotEmpty && email.text.isNotEmpty){
+                        String username=Get.arguments['username']; // Getting username from Get.arguments
                         int ag=int.parse(age.text);
                         int mob=int.parse(mobile_no.text);
-                       await FtpDB().insertuserinfo("khushi75@gmail.com", name.text, ag, mob , email.text);
+                        var res= await FtpDB().doesUsernameExist(username);
+                        if(res==true){
+                          await FtpDB().updateuserinfo(username , name.text, ag, mob, email.text);
+                        }
+                        if(res == false){
+                          await FtpDB().insertuserinfo(username , name.text, ag, mob , email.text);
+                        }
 
                       }
                       else{
