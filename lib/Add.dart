@@ -239,9 +239,25 @@ class _ShowinformationState extends State<Showinformation> {
                         var res= await FtpDB().doesUsernameExistintable2(username);
                         if(res==true){
                           await FtpDB().updateuserinfo(username , name.text, ag, mob, email.text);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Update Successfully'),
+                            ),
+                          );
+                          setState(() {
+
+                          });
                         }
                         if(res == false){
                           await FtpDB().insertuserinfo(username , name.text, ag, mob , email.text);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('insert Successfully'),
+                            ),
+                          );
+                          setState(() {
+
+                          });
                         }
 
                       }

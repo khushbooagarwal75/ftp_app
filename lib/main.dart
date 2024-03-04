@@ -122,7 +122,7 @@ class _LoginState extends State<Login> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter  Usrname';
+                          return 'Please enter  Username';
                         }
                         return null;
                       },
