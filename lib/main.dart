@@ -168,22 +168,25 @@ class _LoginState extends State<Login> {
                               final user = username.text;
                               final password = password_tc.text;
                               final id = int.parse(companyid.text);
-                              final userExists =
-                              await FtpDB().doesUsernameExist(user);
-                              if (userExists) {
-                                // User exists, handle login logic here
-                                var login = await FtpDB().getUser(
-                                    id, user, password);
-                                print(login);
-                                // if(login != null){
-                                Get.to(() => Showinformation(), arguments:{
-                                  'username':user,
-                                });
+                              var uservalid = await FtpDB().getUser(id, user, password);
+
+                                            // Check if user is not null to determine if credentials are valid
+                                            if (uservalid != null) {
+                                              Get.to(() => Showinformation(), arguments:{
+                                                'username':user,
+                                              });
+                                            } else {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text('Invalid Credentials'),
+                                                ),
+                                              );
+                              }
                               } else {
                                 // User doesn't exist, handle accordingly
                                 print('User does not exist');
                               }
-                            }},
+                            },
                           child: Text("Log In"),
 
                     ),

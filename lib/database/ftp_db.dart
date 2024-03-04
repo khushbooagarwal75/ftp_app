@@ -84,16 +84,6 @@ class FtpDB {
     return result
         .isNotEmpty; // Returns true if username exists, false otherwise
   }
-  Future<bool> doesUsernameExistintable2(String username) async {
-    final database = await DatabaseService().database;
-    final List<Map<String, dynamic>> result = await database.query(
-      table2,
-      where: 'username = ?',
-      whereArgs: [username],
-    );
-    return result
-        .isNotEmpty; // Returns true if username exists, false otherwise
-  }
 
 
   Future<int> insertUserIfNotExists(int companyId,String username, String password
@@ -109,12 +99,25 @@ class FtpDB {
     }
   }
 
+  Future<bool> doesUsernameExistintable2(String username) async {
+    final database= await DatabaseService().database;
+    final List<Map<String, dynamic>> result= await database.query( table2,
+        where: 'username = ?',
+        whereArgs: [username],
+    );
+        return result.isNotEmpty;
+  }
+
+
+
+   // Returns true if username exists, false otherwise
+
   Future<Map<String, dynamic>?> getUser(int companyId,String username, String password,
       ) async {
     final database = await DatabaseService().database;
     final List<Map<String, dynamic>> result = await database.query(
       tablename,
-      where: 'companyId = ? AND password = ? AND username = ? ',
+      where: 'companyId = ? AND username = ? AND password = ? ',
       whereArgs: [companyId,username, password],
     );
     if (result.isNotEmpty) {
@@ -127,7 +130,7 @@ class FtpDB {
   Future<List<Map<String, dynamic>>>? fetchDetail() async {
     final database = await DatabaseService().database;
     final result = await database.query(table2);
-    return result.toList();
+    return result.toList(); // Return the list of details
   }
 
 
