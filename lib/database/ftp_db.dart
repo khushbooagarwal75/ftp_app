@@ -15,14 +15,7 @@ class FtpDB {
   );""");
   }
 
-  // Future<int> deleteUser(String username) async {
-  //   final database = await DatabaseService().database;
-  //   return await database.delete(
-  //     table2,
-  //     where: 'username = ?',
-  //     whereArgs: [username],
-  //   );
-  // }
+
   Future<void> createTableuserinfo(Database database) async {
     await database.execute("""CREATE TABLE IF NOT EXISTS $table2(
       "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -55,7 +48,7 @@ class FtpDB {
       );
     } catch (e) {
       print('Error inserting user info: $e');
-      return -1; // Return an error code or handle the error as needed
+      return -1;
     }
   }
 
@@ -91,15 +84,23 @@ class FtpDB {
     return result
         .isNotEmpty; // Returns true if username exists, false otherwise
   }
+  Future<bool> doesUsernameExistintable2(String username) async {
+    final database = await DatabaseService().database;
+    final List<Map<String, dynamic>> result = await database.query(
+      table2,
+      where: 'username = ?',
+      whereArgs: [username],
+    );
+    return result
+        .isNotEmpty; // Returns true if username exists, false otherwise
+  }
 
-  // Method to insert a new user if the username doesn't exist
+
   Future<int> insertUserIfNotExists(int companyId,String username, String password
       ) async {
     if (await doesUsernameExist(username)) {
-      // Username already exists, return -1 or throw an error
       return -1;
     } else {
-      // Username doesn't exist, proceed with insertion
       final database = await DatabaseService().database;
       return await database.insert(
         tablename,
@@ -116,27 +117,20 @@ class FtpDB {
       where: 'companyId = ? AND password = ? AND username = ? ',
       whereArgs: [companyId,username, password],
     );
-
-    // If result is not empty, return the first user found
     if (result.isNotEmpty) {
       return result.first;
     } else {
-      return null; // Return null if no user with the given username is found
+      return null;
     }
   }
 
   Future<List<Map<String, dynamic>>>? fetchDetail() async {
     final database = await DatabaseService().database;
-    // Execute a query to fetch details from the 'details' table
     final result = await database.query(table2);
-    return result.toList(); // Return the list of details
+    return result.toList();
   }
 
-    // Future<void> alterTable() async {
-    //   final database = await DatabaseService().database;
-    //   return await database.execute('ALTER TABLE users ADD COLUMN companyId INTEGER');
-    //
-    // }
+
 
 
   }

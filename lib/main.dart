@@ -66,7 +66,7 @@ class _LoginState extends State<Login> {
     if (result2 == -1) {
     } else {}
     int result3 =
-    await FtpDB().insertUserIfNotExists(123,'Mrigraj', 'Mrigraj123');
+    await FtpDB().insertUserIfNotExists(123,'Mrigraj@gmail.com', 'Mrigraj123');
     if (result3 == -1) {
     } else {}
 

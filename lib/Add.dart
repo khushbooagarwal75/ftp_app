@@ -18,7 +18,7 @@ class _ShowinformationState extends State<Showinformation> {
   TextEditingController age = TextEditingController();
   TextEditingController mobile_no = TextEditingController();
   TextEditingController email = TextEditingController();
-
+  String uname=Get.arguments['username'];
   late DatabaseService databaseService;
   // late final String partNameValue;
   @override
@@ -26,6 +26,7 @@ class _ShowinformationState extends State<Showinformation> {
     super.initState();
     databaseService = DatabaseService();
     _initializeDatabase();
+
     fetchData();
 
   }
@@ -40,13 +41,33 @@ class _ShowinformationState extends State<Showinformation> {
     final List<Map<String, dynamic>>? details = await ftpDB.fetchDetail();
     if (details != null  && details.isNotEmpty) {
       print(details);
-
+      if(details[0]["username"]==uname){
+        name.text = details[0]["name"] as String;
+        age.text = details[0]["age"].toString();
+        mobile_no.text = details[0]["mobile_no"].toString();
+        email.text = details[0]["email"] as String;
+      }
+      else  if(details[1]["username"]==uname){
+        name.text = details[1]["name"] as String;
+        age.text = details[1]["age"].toString();
+        mobile_no.text = details[1]["mobile_no"].toString();
+        email.text = details[1]["email"] as String;
+      }
+      else  if(details[2]["username"]==uname){
+        name.text = details[2]["name"] as String;
+        age.text = details[2]["age"].toString();
+        mobile_no.text = details[2]["mobile_no"].toString();
+        email.text = details[2]["email"] as String;
+      }
+      else{
+        name.text = "name is empty" as String;
+        age.text = "age is empty" as String;
+        mobile_no.text = "mobile_no is empty" as String;
+        email.text = "email is empty" as String;
+      }
       // .text = details[0]["partname"] as String;
     // username= details[0]["username"] as String;
-    name.text = details[0]["name"] as String;
-    age.text = details[0]["age"].toString();
-    mobile_no.text = details[0]["mobile_no"].toString();
-    email.text = details[0]["email"] as String;
+
       // print(partNameValue);
     } else {
       name.text = "name is empty" as String;
@@ -215,7 +236,7 @@ class _ShowinformationState extends State<Showinformation> {
                         String username=Get.arguments['username']; // Getting username from Get.arguments
                         int ag=int.parse(age.text);
                         int mob=int.parse(mobile_no.text);
-                        var res= await FtpDB().doesUsernameExist(username);
+                        var res= await FtpDB().doesUsernameExistintable2(username);
                         if(res==true){
                           await FtpDB().updateuserinfo(username , name.text, ag, mob, email.text);
                         }
