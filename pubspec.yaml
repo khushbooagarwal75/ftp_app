@@ -39,6 +39,8 @@ dependencies:
   sqflite: ^2.3.2
   shared_preferences: ^2.2.2
   get: ^4.6.6
+  flutter_barcode_scanner: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:
